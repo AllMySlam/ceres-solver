@@ -123,10 +123,12 @@ double data[] = {
 /* This is the equivalent of a use-defined CostFunction in the C++ Ceres API.
  * This is passed as a callback to the Ceres C API, which internally converts
  * the callback into a CostFunction. */
+
+//手动求导，解析求导
 static int exponential_residual(void* user_data,
-                                double** parameters,
-                                double* residuals,
-                                double** jacobians) {
+                                double** parameters, // 模型参数，有2维
+                                double* residuals, // 残差
+                                double** jacobians) { // jacobians
   double* measurement = (double*) user_data;
   double x = measurement[0];
   double y = measurement[1];

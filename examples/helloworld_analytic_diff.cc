@@ -45,15 +45,16 @@ using ceres::Solver;
 
 // A CostFunction implementing analytically derivatives for the
 // function f(x) = 10 - x.
+// 定义一个CostFunction或 SizedCostFunction（如果参数和残差在编译时就已知了）的子类。
 class QuadraticCostFunction
     : public SizedCostFunction<1 /* number of residuals */,
                                1 /* size of first parameter */> {
  public:
   virtual ~QuadraticCostFunction() {}
 
-  virtual bool Evaluate(double const* const* parameters,
-                        double* residuals,
-                        double** jacobians) const {
+  virtual bool Evaluate(double const* const* parameters,//输入参数数组
+                        double* residuals,//输出残差数组
+                        double** jacobians) const {//输出雅可比行列式
     double x = parameters[0][0];
 
     // f(x) = 10 - x.

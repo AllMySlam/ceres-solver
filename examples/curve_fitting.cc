@@ -120,11 +120,12 @@ const double data[] = {
 };
 // clang-format on
 
+// 代价函数的计算模型，自动求导
 struct ExponentialResidual {
   ExponentialResidual(double x, double y) : x_(x), y_(y) {}
 
   template <typename T>
-  bool operator()(const T* const m, const T* const c, T* residual) const {
+  bool operator()(const T* const m, const T* const c, T* residual) const { // 残差的计算
     residual[0] = y_ - exp(m[0] * x_ + c[0]);
     return true;
   }

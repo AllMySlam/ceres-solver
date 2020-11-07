@@ -122,11 +122,13 @@ using ceres::Problem;
 using ceres::Solve;
 using ceres::Solver;
 
+
+// 代价函数的计算模型
 struct ExponentialResidual {
   ExponentialResidual(double x, double y) : x_(x), y_(y) {}
 
   template <typename T>
-  bool operator()(const T* const m, const T* const c, T* residual) const {
+  bool operator()(const T* const m, const T* const c, T* residual) const { // 残差的计算
     residual[0] = y_ - exp(m[0] * x_ + c[0]);
     return true;
   }
@@ -145,9 +147,9 @@ int main(int argc, char** argv) {
   Problem problem;
   for (int i = 0; i < kNumObservations; ++i) {
     CostFunction* cost_function =
-        new AutoDiffCostFunction<ExponentialResidual, 1, 1, 1>(
+        new AutoDiffCostFunction<ExponentialResidual, 1, 1, 1>( // 使用自动求导，模板参数：误差类型，输出维度，输入维度，维数要与前面struct中一致
             new ExponentialResidual(data[2 * i], data[2 * i + 1]));
-    problem.AddResidualBlock(cost_function, new CauchyLoss(0.5), &m, &c);
+    problem.AddResidualBlock(cost_function, new CauchyLoss(0.5), &m, &c); // 向问题中添加误差项
   }
 
   Solver::Options options;

@@ -46,6 +46,7 @@ using ceres::Solver;
 // x. The method operator() is templated so that we can then use an
 // automatic differentiation wrapper around it to generate its
 // derivatives.
+// 1 因为要自动求导，所以需要模板类, 但是这里不需要提供 jacobians
 struct CostFunctor {
   template <typename T>
   bool operator()(const T* const x, T* residual) const {
@@ -53,6 +54,13 @@ struct CostFunctor {
     return true;
   }
 };
+
+//### 2.1 ceres求解步骤
+//1. 定义CostFuntion
+//2. 构建Problem （代价函数、损失函数、初始的待优化变量）
+//3. 配置Solver （定义Options 和 Summary）
+//4. 开始优化Solve
+//5. 输出结果SUmmary.BriefReport
 
 int main(int argc, char** argv) {
   google::InitGoogleLogging(argv[0]);
@@ -62,16 +70,16 @@ int main(int argc, char** argv) {
   double x = 0.5;
   const double initial_x = x;
 
-  // Build the problem.
+  // 2 Build the problem.
   Problem problem;
 
-  // Set up the only cost function (also known as residual). This uses
+  // 2 自动求导 Set up the only cost function (also known as residual). This uses
   // auto-differentiation to obtain the derivative (jacobian).
   CostFunction* cost_function =
       new AutoDiffCostFunction<CostFunctor, 1, 1>(new CostFunctor);
   problem.AddResidualBlock(cost_function, nullptr, &x);
 
-  // Run the solver!
+  // 3,4,5 Run the solver!
   Solver::Options options;
   options.minimizer_progress_to_stdout = true;
   Solver::Summary summary;

@@ -4,6 +4,9 @@ CMakeLists.txt.user*
 *.kdev*
 *.bak
 *.orig
+.idea
+cmake-build-release/
+cmake-build-debug/
 build/
 build-bin/
 build-release/

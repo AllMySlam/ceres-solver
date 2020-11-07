@@ -41,7 +41,7 @@ using ceres::Problem;
 using ceres::Solve;
 using ceres::Solver;
 
-// A cost functor that implements the residual r = 10 - x.
+// 此处没有用模板类，A cost functor that implements the residual r = 10 - x.
 struct CostFunctor {
   bool operator()(const double* const x, double* residual) const {
     residual[0] = 10.0 - x[0];
@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
   // Build the problem.
   Problem problem;
 
-  // Set up the only cost function (also known as residual). This uses
+  // 此处用了 数值求导,多了一个参数CENTRAL Set up the only cost function (also known as residual). This uses
   // numeric differentiation to obtain the derivative (jacobian).
   CostFunction* cost_function =
       new NumericDiffCostFunction<CostFunctor, CENTRAL, 1, 1>(new CostFunctor);
